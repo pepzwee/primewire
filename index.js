@@ -40,20 +40,22 @@ function getLinks(show, done) {
         links = [];
 
         $('.movie_version').each(function () {
-            var label = $(this).find('.version_host script').html(),
-                url;
-
-            // ignore advertisement links
-            if (/Promo|Sponsor/.test(label)) {
-                return;
-            }
-
-            url = $(this).find('a[href^="/gohere.php"]').attr('href');
-            url = url.slice(url.indexOf('?') + 1);
-            url = qs.parse(url).url;
-            url = new Buffer(url, 'base64').toString();
-
-            links.push(url);
+            try {
+                var label = $(this).find('.version_host script').html(),
+                    url;
+    
+                // ignore advertisement links
+                if (/Promo|Sponsor/.test(label)) {
+                    return;
+                }
+    
+                url = $(this).find('a[href^="/gohere.php"]').attr('href');
+                url = url.slice(url.indexOf('?') + 1);
+                url = qs.parse(url).url;
+                url = new Buffer(url, 'base64').toString();
+                
+                links.push(url);
+            } catch(e) {}
         });
 
         done(null, links);
